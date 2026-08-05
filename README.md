@@ -8,7 +8,7 @@ The labs focus on building a strong foundation in Python programming, Linux deve
 
 ```
 .
-├── Week 1/
+├── Week 1/Lab1/
 │   ├── week1-foundations/
 │   ├── README.md
 │   └── hello.py
