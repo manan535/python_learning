@@ -1,0 +1,1 @@
+A simple Python project demonstrating virtual environments and project setup.
