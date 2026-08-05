@@ -11,7 +11,9 @@ The labs focus on building a strong foundation in Python programming, Linux deve
 ├── Week 1/
 │   ├── week1-foundations/
 │   ├── README.md
-│   └── ...
+│   └── hello.py
+│   └── requirements.txt
+│   └── screenshots
 ├── Week 2/
 ├── Week 3/
 └── ...
