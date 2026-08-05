@@ -11,7 +11,7 @@ Create a clean, reproducible Python project using a virtual environment on Linux
 ### Project Structure
 
 ```
-week1/
+week1/Lab1/
 ├── .venv/
 ├── screenshots/
 │   ├── code.png
