@@ -10,29 +10,34 @@ The labs focus on building a strong foundation in Python programming, Linux deve
 .
 python_learning/
 ├── README.md
-├── Week 1/
-│   ├── Lab1/
-│   │   ├── week1-foundations/
-│   │   ├── README.md
-│   │   ├── hello.py
-│   │   ├── requirements.txt
-│   │   └── screenshots/
-│   └── Lab2/
-│       ├── fluency.py
-│       ├── numbers.txt
-│       ├── README.md
-│       └── screenshots/
+├── week1/
+│   └── week1-foundations/
+│       ├── Lab1/
+│       │   ├── hello.py
+│       │   ├── README.md
+│       │   ├── requirements.txt
+│       │   └── screenshots/
+│       │
+│       └── Lab2/
+│           ├── fluency.py
+│           ├── numbers.txt
+│           ├── README.md
+│           └── screenshots/
+│
 ├── Week 2/
-└── Week 3/
+├── Week 3/
+└── ...
+```
 ```
 
 ## Weekly Progress
 
-| Week | Topics |
-|------|--------|
-| Week 1 | Project setup, virtual environments, Git, Python fundamentals |
-| Week 2 | *(To be added)* |
-| Week 3 | *(To be added)* |
+| Week | Lab | Topics Covered |
+|------|-----|----------------|
+| Week 1 | Lab 1 | Project setup, virtual environments, Linux (WSL), Git |
+| Week 1 | Lab 2 | Python dictionaries, Counter, list comprehensions, file handling, exception handling |
+| Week 2 | - | To be added |
+| Week 3 | - | To be added |
 
 ## Technologies
 
