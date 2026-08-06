@@ -6,7 +6,6 @@ def word_count(text):
 
     for i in string.punctuation:
         text = text.replace(i, " ")
-
     words = text.split()
     word_frequency = {}
 
@@ -15,28 +14,22 @@ def word_count(text):
             word_frequency[word] = 1
         else:
             word_frequency[word] += 1
-
     return word_frequency
 
 
 def word_count_counter(text):
     text = text.lower()
-
     for i in string.punctuation:
         text = text.replace(i, " ")
-
     words = text.split()
-
     return Counter(words)
 
 
 def flatten(nested_list):
     flat_list = []
-
     for sublist in nested_list:
         for element in sublist:
             flat_list.append(element)
-
     return flat_list
 
 
@@ -51,18 +44,14 @@ def mean_of_file(file_name):
         with open(file_name, "r") as file:
             for line in file:
                 values.append(float(line.strip()))
-
         if len(values) == 0:
             return None
-
         return sum(values) / len(values)
-
     except FileNotFoundError:
         print("File not found.")
 
     except ValueError:
         print("Invalid data.")
-
     return None
 
 
