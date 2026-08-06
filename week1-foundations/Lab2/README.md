@@ -150,7 +150,7 @@ Task 5
 
 ### Ubuntu (WSL) Execution
 
-![Ubuntu Terminal](screenshots/ubuntu.png)
+![Ubuntu Terminal](screenshots/commands.png)
 
 ---
 
