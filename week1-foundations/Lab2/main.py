@@ -1,96 +1,88 @@
 import string
 from collections import Counter
 
-
-# Task 1
 def word_count(text):
     text = text.lower()
 
-    for ch in string.punctuation:
-        text = text.replace(ch, "")
+    for i in string.punctuation:
+        text = text.replace(i, " ")
 
     words = text.split()
-
-    counts = {}
+    word_frequency = {}
 
     for word in words:
-        if word in counts:
-            counts[word] += 1
+        if word not in word_frequency:
+            word_frequency[word] = 1
         else:
-            counts[word] = 1
+            word_frequency[word] += 1
 
-    return counts
+    return word_frequency
 
 
-# Task 2
 def word_count_counter(text):
     text = text.lower()
 
-    for ch in string.punctuation:
-        text = text.replace(ch, "")
+    for i in string.punctuation:
+        text = text.replace(i, " ")
 
     words = text.split()
 
     return Counter(words)
 
 
-# Task 3
-def flatten(nested):
-    result = []
+def flatten(nested_list):
+    flat_list = []
 
-    for sublist in nested:
-        for item in sublist:
-            result.append(item)
+    for sublist in nested_list:
+        for element in sublist:
+            flat_list.append(element)
 
-    return result
-
-
-# Task 4
-def flatten_comprehension(nested):
-    return [item for sublist in nested for item in sublist]
+    return flat_list
 
 
-# Task 5
-def mean_of_file(path):
-    numbers = []
+def flatten_list_comprehension(nested_list):
+    return [element for sublist in nested_list for element in sublist]
+
+
+def mean_of_file(file_name):
+    values = []
 
     try:
-        with open(path, "r") as file:
+        with open(file_name, "r") as file:
             for line in file:
-                numbers.append(float(line.strip()))
+                values.append(float(line.strip()))
 
-        if len(numbers) == 0:
+        if len(values) == 0:
             return None
 
-        return sum(numbers) / len(numbers)
+        return sum(values) / len(values)
 
     except FileNotFoundError:
-        print("Error: File not found.")
-        return None
+        print("File not found.")
 
     except ValueError:
-        print("Error: File contains non-numeric data.")
-        return None
+        print("Invalid data.")
+
+    return None
 
 
-# Task 6
 if __name__ == "__main__":
 
-    sample = "Hello, hello! Python is great. Python!"
+    text = "Hello, hello! My name is Manan!.my What > is your name?"
 
     print("Task 1")
-    print(word_count(sample))
+    print(word_count(text))
 
     print("\nTask 2")
-    print(word_count_counter(sample))
+    print(word_count_counter(text))
 
-    nested = [[1, 2], [3, 4], [5, 6]]
+    sample_list = [[1, 2], [3, 4], [5, 6]]
 
     print("\nTask 3")
-    print(flatten(nested))
+    print(flatten(sample_list))
 
     print("\nTask 4")
-    print(flatten_comprehension(nested))
+    print(flatten_list_comprehension(sample_list))
 
     print("\nTask 5")
     print(mean_of_file("numbers.txt"))
