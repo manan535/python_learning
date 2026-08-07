@@ -1,14 +1,14 @@
-HEAD
 # Python Learning Labs
 
 This repository contains my weekly Python lab assignments completed as part of my internship/training.
 
-The labs focus on building a strong foundation in Python programming, Linux development, virtual environments, Git, and software engineering best practices.
+The labs focus on building a strong foundation in Python programming, Linux development, Git, GitHub collaboration, virtual environments, and software engineering best practices.
+
+---
 
 ## Repository Structure
 
-```
-.
+```text
 python_learning/
 ├── README.md
 ├── week1/
@@ -19,76 +19,64 @@ python_learning/
 │       │   ├── requirements.txt
 │       │   └── screenshots/
 │       │
-│       └── Lab2/
-│           ├── fluency.py
-│           ├── numbers.txt
+│       ├── Lab2/
+│       │   ├── main.py
+│       │   ├── numbers.txt
+│       │   ├── README.md
+│       │   └── screenshots/
+│       │
+│       └── Lab3/
 │           ├── README.md
 │           └── screenshots/
 │
-├── Week 2/
-├── Week 3/
+├── week2/
+├── week3/
 └── ...
 ```
-```
+
+---
 
 ## Weekly Progress
 
 | Week | Lab | Topics Covered |
 |------|-----|----------------|
-| Week 1 | Lab 1 | Project setup, virtual environments, Linux (WSL), Git |
-| Week 1 | Lab 2 | Python dictionaries, Counter, list comprehensions, file handling, exception handling |
-| Week 2 | - | To be added |
-| Week 3 | - | To be added |
+| Week 1 | Lab 1 | Project setup, virtual environments, Linux (WSL), Git, GitHub |
+| Week 1 | Lab 2 | File handling, dictionaries, word frequency analysis, exception handling |
+| Week 1 | Lab 3 | Git branching, feature branches, pull requests, peer review, merge workflow |
 
-## Technologies
+---
 
-- Python
-- Linux (WSL)
-- Git & GitHub
-- Virtual Environments (`venv`)
-- Visual Studio Code
-
-## Goal
-
-To document my progress throughout the internship by completing weekly labs and maintaining clean, reproducible Python projects.
-
-# Python Learning Labs
-
-This repository contains my weekly Python lab assignments completed as part of my internship/training.
-
-The labs focus on building a strong foundation in Python programming, Linux development, virtual environments, Git, and software engineering best practices.
-
-## Repository Structure
-
-```
-.
-├── Week 1/Lab1/
-│   ├── week1-foundations/
-│   ├── README.md
-│   └── hello.py
-│   └── requirements.txt
-│   └── screenshots
-├── Week 2/
-├── Week 3/
-└── ...
-```
-
-## Weekly Progress
-
-| Week | Topics |
-|------|--------|
-| Week 1 | Project setup, virtual environments, Git, Python fundamentals |
-| Week 2 | *(To be added)* |
-| Week 3 | *(To be added)* |
-
-## Technologies
+## Technologies Used
 
 - Python
 - Linux (WSL)
-- Git & GitHub
+- Git
+- GitHub
 - Virtual Environments (`venv`)
+- Bash
 - Visual Studio Code
+
+---
+
+## Skills Learned
+
+- Setting up Python development environments
+- Working with Git and GitHub
+- Creating and managing Git branches
+- Opening and reviewing Pull Requests
+- Collaborating using GitHub workflows
+- Reading and writing files in Python
+- Using dictionaries for data processing
+- Writing clean and maintainable code
+
+---
 
 ## Goal
 
-To document my progress throughout the internship by completing weekly labs and maintaining clean, reproducible Python projects.
+To document my progress throughout the internship by completing weekly labs while following software engineering best practices, maintaining clean code, and using professional Git and GitHub workflows.
+
+---
+
+## Author
+
+**Manan Gupta**
