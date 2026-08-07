@@ -43,7 +43,7 @@ A peer reviewed the code and requested a module docstring in `main.py`.
 
 ### Review Comment
 
-![Adding Review](screenshots/adding-review.png)
+![Adding Review](screenshots/Adding-review.png)
 
 ---
 
@@ -63,7 +63,7 @@ git push
 
 The reviewer approved the changes, and the Pull Request was merged into the `main` branch.
 
-![Merged Pull Request](screenshots/review.png)
+![Merged Pull Request](screenshots/Review.png)
 
 ---
 
