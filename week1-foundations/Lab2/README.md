@@ -161,3 +161,9 @@ Task 5
 - Visual Studio Code
 - Python Virtual Environment (`venv`)
 - Git & GitHub
+
+## Usage
+
+Run the program with:
+```bash
+python main.py
