@@ -1,3 +1,8 @@
+"""
+Lab 2: Word Counter Program
+
+Build fluency by writing small current functions
+"""
 import string
 from collections import Counter
 
