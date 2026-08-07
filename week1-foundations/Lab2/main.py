@@ -1,3 +1,4 @@
+"""Lab 2: Number processing program."""
 import string
 from collections import Counter
 
