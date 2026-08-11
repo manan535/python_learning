@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Database files
+*.sqlite
+*.sqlite3
+*.db
+
+# CSV data files
+*.csv
+
+# Keep small challenge samples
+!samples/
+!samples/*.csv
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
