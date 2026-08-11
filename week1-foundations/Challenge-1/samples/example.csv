@@ -1,0 +1,9 @@
+name,age,salary,department,join_date
+Alice,25,50000,Engineering,2024-01-15
+Bob,30,65000,Sales,2023-06-20
+Charlie,28,55000,Engineering,2024-03-10
+David,,70000,Marketing,2022-11-05
+Eva,35,,Sales,2021-08-12
+Frank,26,48000,Engineering,2024-05-18
+Grace,31,72000,Marketing,2023-09-25
+Henry,29,60000,Sales,
