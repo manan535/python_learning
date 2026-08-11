@@ -1,0 +1,9 @@
+product,quantity,price,category,sale_date
+Laptop,5,75000,Electronics,2025-01-10
+Mouse,20,800,Accessories,2025-01-12
+Keyboard,15,1500,Accessories,2025-01-15
+Monitor,8,18000,Electronics,2025-01-20
+Laptop,3,75000,Electronics,2025-02-05
+Mouse,,800,Accessories,2025-02-10
+Headphones,12,2500,Accessories,2025-02-15
+Monitor,6,18000,Electronics,
