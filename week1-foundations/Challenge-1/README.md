@@ -4,12 +4,12 @@
 
 This challenge combines Python command-line development and SQL data analysis.
 
-The project consists of two parts:
+The project consists of two main parts:
 
 1. **CSV Data Profiler** – A Python command-line tool called `csvstat.py` that analyzes CSV files and reports basic data quality and statistical information.
 2. **SQL Analysis** – Four SQL queries using the Chinook SQLite database to answer common business questions.
 
-The challenge also focuses on writing clean code, handling errors, testing functionality, and following a professional Git/GitHub workflow.
+The challenge also focuses on writing clean code, handling errors, testing functionality, validating data quality, documenting limitations, and following a professional Git/GitHub workflow.
 
 ---
 
@@ -28,7 +28,8 @@ Challenge-1/
 │   └── monthly_revenue.sql
 └── samples/
     ├── example.csv
-    └── sales.csv
+    ├── sales.csv
+    └── unsupported_dates.csv
 ```
 
 ---
@@ -41,6 +42,10 @@ Challenge-1/
 
 It accepts a CSV file as input and reports useful information about the dataset.
 
+The profiler provides basic statistical information while also attempting to identify potential data-quality issues.
+
+---
+
 ## Features
 
 The tool provides:
@@ -48,24 +53,35 @@ The tool provides:
 - Number of rows
 - Number of columns
 - Automatic column type inference
+- Numeric statistics
 - Missing-value count
 - Missing-value percentage
 - Minimum value for numeric columns
 - Mean value for numeric columns
 - Maximum value for numeric columns
 - Most frequent values for text columns
+- Date-format detection
+- Unsupported date-format detection
+- Warnings for potentially unrecognized date values
 - Command-line support using `argparse`
+- Input validation
 - Friendly error messages for invalid input
 
 ---
 
-## Supported Data Types
+# Supported Data Types
 
 The profiler attempts to classify each column as:
 
-### Numeric
+- Numeric
+- Date
+- Text
 
-Columns containing values that can be converted to numbers.
+---
+
+## Numeric
+
+A column is classified as numeric when all non-empty values can be converted to numbers.
 
 Example:
 
@@ -75,18 +91,60 @@ Example:
 35
 ```
 
-### Date
+For numeric columns, the profiler calculates:
 
-Columns containing values matching supported date formats such as:
+- Minimum
+- Mean
+- Maximum
+
+Example:
+
+```text
+Column: age
+  Type: numeric
+  Missing: 1 (12.5%)
+  Min: 25.00
+  Mean: 29.14
+  Max: 35.00
+```
+
+---
+
+## Date
+
+A column is classified as a date when all non-empty values match one of the explicitly supported date formats.
+
+The currently supported date formats are:
+
+```text
+YYYY-MM-DD
+YYYY-MM-DD HH:MM:SS
+DD/MM/YYYY
+MM/DD/YYYY
+```
+
+Examples:
 
 ```text
 2024-01-15
-2024-03-10
+2024-01-15 14:30:00
+15/01/2024
+01/15/2024
 ```
 
-### Text
+These formats are explicitly defined in the Python implementation.
 
-Columns that do not consistently match numeric or date formats.
+They are also displayed in the command-line help:
+
+```bash
+python3 csvstat.py --help
+```
+
+---
+
+## Text
+
+A column is classified as text when its non-empty values do not consistently match the supported numeric or date formats.
 
 Example:
 
@@ -95,6 +153,56 @@ Engineering
 Sales
 Marketing
 ```
+
+---
+
+# Unsupported Date Formats
+
+The profiler does not silently assume that an unrecognized date format is valid.
+
+For example:
+
+```text
+15-Jan-2024
+```
+
+is not one of the currently supported date formats.
+
+If a value appears to contain date information but uses an unsupported format, the profiler:
+
+1. Classifies the column as `text`.
+2. Generates a warning.
+3. Alerts the user that the values may require additional date-format support.
+
+Example:
+
+```text
+Column: birth_date
+  Type: text
+  Warning: Some values appear to be dates but use an unsupported date format.
+  Missing: 0 (0.0%)
+```
+
+This behavior helps prevent potentially important data from being silently misclassified.
+
+---
+
+# Missing Values
+
+Empty values are treated as missing.
+
+The profiler reports:
+
+- Number of missing values
+- Percentage of missing values
+
+Example:
+
+```text
+Missing: 1 (12.5%)
+```
+
+Missing values are excluded when calculating numeric statistics.
 
 ---
 
@@ -114,7 +222,7 @@ python3 csvstat.py samples/example.csv
 
 ---
 
-## Top Frequent Values
+# Top Frequent Values
 
 The optional `--top` argument displays the most frequent values for text columns.
 
@@ -136,17 +244,58 @@ Column: department
     Marketing: 2
 ```
 
+The `--top` argument must be a positive integer.
+
+For example:
+
+```bash
+python3 csvstat.py samples/example.csv --top -3
+```
+
+produces:
+
+```text
+csvstat.py: error: --top must be a positive integer
+```
+
+The same validation applies to:
+
+```bash
+python3 csvstat.py samples/example.csv --top 0
+```
+
+---
+
+# Command-Line Help
+
+The tool provides command-line help using `argparse`.
+
+Run:
+
+```bash
+python3 csvstat.py --help
+```
+
+The help output includes the supported date formats:
+
+```text
+Profile a CSV file and display basic statistics. Supported date formats:
+YYYY-MM-DD, YYYY-MM-DD HH:MM:SS, DD/MM/YYYY, MM/DD/YYYY.
+```
+
+This makes the supported input formats visible to users instead of requiring them to inspect the source code.
+
 ---
 
 # Example Dataset
 
-The project includes a small sample dataset:
+The project includes three sample CSV datasets.
 
-```text
-samples/example.csv
-```
+## `samples/example.csv`
 
-Example columns:
+This is the primary sample dataset.
+
+It contains:
 
 ```text
 name
@@ -156,7 +305,88 @@ department
 join_date
 ```
 
-The dataset intentionally contains missing values so that missing-value detection can be tested.
+The dataset contains:
+
+- Text values
+- Numeric values
+- Date values
+- Missing values
+
+Example:
+
+```csv
+name,age,salary,department,join_date
+Alice,25,50000,Engineering,2024-01-15
+Bob,30,65000,Sales,2023-06-20
+Charlie,28,55000,Engineering,2024-03-10
+David,,70000,Marketing,2022-11-05
+Eva,35,,Sales,2021-08-12
+Frank,26,48000,Engineering,2024-05-18
+Grace,31,72000,Marketing,2023-09-25
+Henry,29,60000,Sales,
+```
+
+---
+
+## `samples/sales.csv`
+
+This dataset provides a second dataset for testing.
+
+It contains:
+
+```text
+product
+quantity
+price
+category
+sale_date
+```
+
+It includes:
+
+- Numeric values
+- Text values
+- Date values
+- Missing values
+- Repeated categorical values
+
+Example usage:
+
+```bash
+python3 csvstat.py samples/sales.csv --top 3
+```
+
+---
+
+## `samples/unsupported_dates.csv`
+
+This dataset is specifically used to test unsupported date-format detection.
+
+Example:
+
+```csv
+name,birth_date,department
+Alice,15-Jan-2024,Engineering
+Bob,20-Feb-2024,Sales
+Charlie,25-Mar-2024,Engineering
+```
+
+The `birth_date` values are date-like but use a format that is not currently supported.
+
+Running:
+
+```bash
+python3 csvstat.py samples/unsupported_dates.csv
+```
+
+produces a warning:
+
+```text
+Column: birth_date
+  Type: text
+  Warning: Some values appear to be dates but use an unsupported date format.
+  Missing: 0 (0.0%)
+```
 
 ---
 
@@ -168,7 +398,7 @@ Running:
 python3 csvstat.py samples/example.csv
 ```
 
-produces output similar to:
+produces:
 
 ```text
 File: samples/example.csv
@@ -210,6 +440,8 @@ The program handles common input errors without displaying a Python traceback.
 
 ## Missing File
 
+Command:
+
 ```bash
 python3 csvstat.py samples/not_found.csv
 ```
@@ -220,7 +452,11 @@ Output:
 Error: File not found: samples/not_found.csv
 ```
 
+---
+
 ## Invalid `--top` Value
+
+Command:
 
 ```bash
 python3 csvstat.py samples/example.csv --top -3
@@ -232,25 +468,54 @@ Output:
 csvstat.py: error: --top must be a positive integer
 ```
 
-The program also validates `--top 0` and rejects it because the value must be positive.
+The same validation is applied to:
+
+```bash
+python3 csvstat.py samples/example.csv --top 0
+```
+
+---
+
+## Invalid CSV
+
+The program checks whether the CSV contains a header row.
+
+If a valid CSV header cannot be detected, the program displays an error instead of producing a Python traceback.
+
+---
+
+## Unsupported Date Format
+
+When date-like values use an unsupported format, the profiler does not silently ignore the values.
+
+Instead, it displays a warning:
+
+```text
+Warning: Some values appear to be dates but use an unsupported date format.
+```
+
+This makes potential data-quality problems visible to the user.
 
 ---
 
 # Testing
 
-The profiler was tested using two different CSV files:
+The CSV profiler was tested using three CSV files:
 
 ```text
 samples/example.csv
 samples/sales.csv
+samples/unsupported_dates.csv
 ```
 
 Testing covered:
 
-- Row and column counting
+- Row counting
+- Column counting
 - Numeric type inference
 - Text type inference
 - Date type inference
+- Supported date formats
 - Missing-value detection
 - Missing-value percentages
 - Numeric minimum
@@ -259,6 +524,17 @@ Testing covered:
 - Most frequent text values
 - Missing input files
 - Invalid `--top` values
+- Unsupported date-format detection
+- Warning generation for unsupported date-like values
+- Command-line help
+
+The profiler was also tested to ensure that normal text values such as:
+
+```text
+Marketing
+```
+
+do not incorrectly trigger an unsupported-date warning.
 
 ---
 
@@ -266,7 +542,7 @@ Testing covered:
 
 The SQL portion uses the **Chinook SQLite sample database**.
 
-The database represents a digital music store and contains related tables such as:
+The Chinook database represents a digital music store and contains related tables such as:
 
 ```text
 Artist
@@ -276,6 +552,10 @@ Genre
 Customer
 Invoice
 InvoiceLine
+Playlist
+PlaylistTrack
+Employee
+MediaType
 ```
 
 The database used for local testing was the Chinook SQLite database from the previous lab.
@@ -286,13 +566,17 @@ The database itself is intentionally not included in this challenge repository b
 
 # SQL Query 1 – Top 5 Customers by Total Spend
 
-### File
+## File
 
 ```text
 sql/top_customers.sql
 ```
 
-### Query
+## Purpose
+
+Identifies the five customers with the highest total purchase spending.
+
+## Query
 
 ```sql
 -- Insight: Identifies the top 5 customers based on their total purchase spending.
@@ -312,7 +596,7 @@ ORDER BY TotalSpent DESC
 LIMIT 5;
 ```
 
-### Result
+## Result
 
 ```text
 6|Helena|Holý|49.62
@@ -322,21 +606,25 @@ LIMIT 5;
 45|Ladislav|Kovács|45.62
 ```
 
-### Insight
+## Insight
 
-Helena Holý is the highest-spending customer with total spending of **49.62**.
+Helena Holý is the highest-spending customer in the result, with total spending of **49.62**.
 
 ---
 
 # SQL Query 2 – Revenue by Country
 
-### File
+## File
 
 ```text
 sql/revenue_by_country.sql
 ```
 
-### Query
+## Purpose
+
+Calculates the total revenue generated by customers from each country.
+
+## Query
 
 ```sql
 -- Insight: Calculates total revenue generated by each customer country.
@@ -351,7 +639,7 @@ GROUP BY c.Country
 ORDER BY TotalRevenue DESC;
 ```
 
-### Top Results
+## Top Results
 
 ```text
 USA|523.06
@@ -365,21 +653,27 @@ Portugal|77.24
 India|75.26
 ```
 
-### Insight
+## Insight
 
 The **USA generates the highest revenue**, with total revenue of **523.06**.
+
+India generates **75.26** in revenue in the dataset.
 
 ---
 
 # SQL Query 3 – 10 Best-Selling Tracks
 
-### File
+## File
 
 ```text
 sql/best_selling_tracks.sql
 ```
 
-### Query
+## Purpose
+
+Identifies the ten tracks with the highest total quantity sold.
+
+## Query
 
 ```sql
 -- Insight: Identifies the 10 best-selling tracks based on total quantity sold.
@@ -396,9 +690,7 @@ ORDER BY UnitsSold DESC, t.Name ASC
 LIMIT 10;
 ```
 
-### Result
-
-The top tracks returned by the database include:
+## Result
 
 ```text
 2|Balls to the Wall|2
@@ -413,21 +705,27 @@ The top tracks returned by the database include:
 162|Cornucopia|2
 ```
 
-### Insight
+## Insight
 
-The database contains several tracks tied at **2 units sold**, so the query uses track name as a secondary sort to make the result deterministic.
+Several tracks are tied at **2 units sold**.
+
+A secondary alphabetical sort by track name is used to make the output deterministic when multiple tracks have the same number of sales.
 
 ---
 
 # SQL Query 4 – Monthly Revenue
 
-### File
+## File
 
 ```text
 sql/monthly_revenue.sql
 ```
 
-### Query
+## Purpose
+
+Calculates total revenue for each month in 2009.
+
+## Query
 
 ```sql
 -- Insight: Calculates total revenue for each month in 2009.
@@ -441,7 +739,7 @@ GROUP BY Month
 ORDER BY Month;
 ```
 
-### Result
+## Result
 
 ```text
 2009-01|35.64
@@ -458,9 +756,9 @@ ORDER BY Month;
 2009-12|37.62
 ```
 
-### Insight
+## Insight
 
-The query groups invoices by month using SQLite's `strftime()` function and calculates the total revenue for each month of 2009.
+The query uses SQLite's `strftime()` function to group invoices by month and calculate the total revenue for each month of 2009.
 
 ---
 
@@ -479,6 +777,8 @@ The SQL analysis demonstrates:
 - SQLite `strftime()`
 - Aggregate functions
 - Relational table relationships
+- Deterministic ordering
+- Data aggregation
 
 ---
 
@@ -493,10 +793,49 @@ The CSV profiler demonstrates:
 - List comprehensions
 - Exception handling
 - Type inference
+- Regular expressions
 - Numeric calculations
 - `Counter`
 - Date parsing
 - Command-line arguments
+- Input validation
+- Data-quality warnings
+
+---
+
+# Data Quality Considerations
+
+A key design consideration in this project is avoiding silent misclassification of input data.
+
+The profiler has a limited set of explicitly supported date formats:
+
+```text
+YYYY-MM-DD
+YYYY-MM-DD HH:MM:SS
+DD/MM/YYYY
+MM/DD/YYYY
+```
+
+A value using a different date representation should not be silently assumed to be ordinary text without notifying the user.
+
+For example:
+
+```text
+15-Jan-2024
+```
+
+is not currently supported.
+
+The profiler therefore:
+
+1. Detects that the value appears to be date-like.
+2. Classifies the column as text.
+3. Generates a warning.
+4. Alerts the user that the format is unsupported.
+
+This approach makes the limitation visible and reduces the risk of silently producing incorrect analysis.
+
+It also makes it easier to extend the profiler later when new date formats need to be supported.
 
 ---
 
@@ -509,7 +848,25 @@ The CSV profiler demonstrates:
 - Git
 - GitHub
 
-The CSV profiler uses only Python's standard library and does not require third-party packages.
+The CSV profiler uses only the Python standard library and does not require third-party packages.
+
+---
+
+# Dependencies
+
+No external Python packages are required.
+
+The project uses Python standard-library modules including:
+
+```text
+argparse
+csv
+collections
+datetime
+re
+```
+
+The `requirements.txt` file documents that there are no external dependencies.
 
 ---
 
@@ -517,28 +874,70 @@ The CSV profiler uses only Python's standard library and does not require third-
 
 ## CSV Profiler
 
+Run the profiler on the main sample:
+
 ```bash
 python3 csvstat.py samples/example.csv
 ```
 
-With top values:
+Run it with the top three frequent text values:
 
 ```bash
 python3 csvstat.py samples/example.csv --top 3
 ```
 
-## SQL Queries
-
-The SQL queries can be executed using SQLite:
+Run it on the second dataset:
 
 ```bash
-sqlite3 <path-to-Chinook_Sqlite.sqlite> < sql/top_customers.sql
+python3 csvstat.py samples/sales.csv --top 3
 ```
 
-For example:
+Test unsupported date formats:
+
+```bash
+python3 csvstat.py samples/unsupported_dates.csv
+```
+
+View command-line help:
+
+```bash
+python3 csvstat.py --help
+```
+
+---
+
+## SQL Queries
+
+The SQL queries can be executed using SQLite and the Chinook database.
+
+The database used during development is located in the previous Lab 5 directory:
+
+```text
+../Lab5/Chinook_Sqlite.sqlite
+```
+
+Run the top customers query:
 
 ```bash
 sqlite3 ../Lab5/Chinook_Sqlite.sqlite < sql/top_customers.sql
+```
+
+Run the revenue by country query:
+
+```bash
+sqlite3 ../Lab5/Chinook_Sqlite.sqlite < sql/revenue_by_country.sql
+```
+
+Run the best-selling tracks query:
+
+```bash
+sqlite3 ../Lab5/Chinook_Sqlite.sqlite < sql/best_selling_tracks.sql
+```
+
+Run the monthly revenue query:
+
+```bash
+sqlite3 ../Lab5/Chinook_Sqlite.sqlite < sql/monthly_revenue.sql
 ```
 
 ---
@@ -547,29 +946,72 @@ sqlite3 ../Lab5/Chinook_Sqlite.sqlite < sql/top_customers.sql
 
 The challenge is developed using a feature-branch workflow.
 
-The intended workflow is:
-
 ```text
 main
   │
   └── feature/challenge-1
           │
+          ├── Development
           ├── Small commits
           ├── Testing
           ├── Pull Request
           ├── Peer Review
+          ├── Manager Review
+          ├── Address Feedback
           └── Merge
 ```
 
-Changes are reviewed through GitHub Pull Requests before being merged into `main`.
+The workflow used for this challenge includes:
+
+- Creating a feature branch
+- Making focused commits
+- Testing changes locally
+- Pushing the feature branch to GitHub
+- Creating a Pull Request
+- Receiving peer/manager review
+- Addressing review feedback
+- Updating the Pull Request
+- Merging the approved Pull Request into `main`
+
+---
+
+# Engineering Considerations
+
+This challenge goes beyond simply producing the expected output.
+
+The implementation considers:
+
+### Input Validation
+
+Command-line arguments are validated before processing.
+
+For example, `--top` must be a positive integer.
+
+### Error Handling
+
+Missing files and invalid input are handled with clear messages rather than exposing Python tracebacks.
+
+### Data Quality
+
+Unsupported date-like values generate warnings instead of being silently ignored.
+
+### Explicit Limitations
+
+The supported date formats are documented both in the README and in the command-line help.
+
+### Deterministic SQL Results
+
+Queries with possible ties use secondary sorting where appropriate so that results are reproducible.
 
 ---
 
 # Conclusion
 
-This challenge combines Python scripting, command-line development, CSV data profiling, SQL analysis, relational databases, error handling, testing, and Git/GitHub collaboration.
+This challenge combines Python scripting, command-line development, CSV data profiling, SQL analysis, relational databases, error handling, data-quality validation, testing, and Git/GitHub collaboration.
 
 The project demonstrates how Python can be used to build reusable command-line data tools while SQL can be used to answer business questions from structured relational data.
+
+The implementation also considers how a data-processing tool should behave when it encounters input formats that it does not explicitly support, making potential data-quality issues visible instead of silently ignoring them.
 
 ---
 
