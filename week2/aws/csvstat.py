@@ -290,12 +290,6 @@ def main():
         output_filename = f"{Path(filename).stem}.txt"
         output_key = f"{output_prefix}{output_filename}"
 
-        s3.upload_file(
-            str(local_path),
-            args.bucket,
-            f"{output_prefix}input-{filename}",
-        )
-
         result_bytes = result.encode("utf-8")
 
         s3.put_object(
