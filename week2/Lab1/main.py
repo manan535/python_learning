@@ -22,3 +22,10 @@ print(df.groupby("quality")["alcohol"].agg(["mean", "count"]))
 
 print(df.isnull().sum())
 print(df.duplicated().sum())
+df1 = df[["Id", "quality"]]
+df2 = df[["Id", "alcohol"]]
+
+merged = pd.merge(df1, df2, on="Id")
+
+print(merged.head())
+print(merged.shape)
