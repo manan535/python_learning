@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "csvstat-manan"
+version = "0.1.0"
+description = "A command-line CSV data profiler"
+readme = "README.md"
+requires-python = ">=3.9"
+
+authors = [
+    { name = "Manan Gupta" }
+]
+
+license = "MIT"
+
+keywords = [
+    "csv",
+    "data",
+    "statistics",
+    "cli",
+    "data-profiler"
+]
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent"
+]
+
+
+[project.scripts]
+csvstat = "csvstat.cli:main"
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
